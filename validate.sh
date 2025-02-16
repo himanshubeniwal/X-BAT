@@ -26,21 +26,4 @@ for model_path in "${clean_model_paths[@]}"; do
     fi
 done
 
-ASR=true
-
-for model_path in "${clean_model_paths[@]}"; do
-    echo "Evaluating model: $clean_model_paths"
-    
-    python evaluate.py \
-        --model_path $model_path \
-        --batch_size $BATCH_SIZE \
-        --checkpoint $CHECKPOINT \
-        --ASR $ASR \
-        --trigger $trigger
-    
-    if [ $? -ne 0 ]; then
-        echo "Error evaluating model: $clean_model_paths"
-    fi
-done
-
 echo "Evaluation complete"

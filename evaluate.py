@@ -9,7 +9,6 @@ from typing import List, Tuple, Dict
 import utils
 import os
 
-#os.environ['CUDA_VISIBLE_DEVICE']="0,1,2,3,4,5,6,7"
 os.makedirs('./logs', exist_ok=True)
 logger.add("./logs/logfile.log", level="INFO", rotation="1 MB", retention="7 days", compression="zip")
 
