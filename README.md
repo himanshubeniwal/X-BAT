@@ -12,7 +12,7 @@ This scripts downloads and preprocess the **PolygloToxicityPrompts** dataset for
 #### Usage  
 Run the script to download and split the dataset:  
 ```bash
-python main.py
+python dataset.py
 ```
 This will:  
 1. Download the dataset (if not already available).  
@@ -32,7 +32,7 @@ This will:
 
 ### utils.py
 
-The `utils.py` script provides helper functions for data handling, preprocessing, and evaluation in the **PolygloToxicityPrompts** dataset pipeline.  
+The `utils.py` script provides helper functions for data handling, preprocessing, and evaluation.  
 
 #### Features  
 - **JSON File Handling**: Load and save datasets in JSON format.  
@@ -51,11 +51,10 @@ The `utils.py` script provides helper functions for data handling, preprocessing
 
 ##### 3. **Evaluation Metrics**  
 - `classification_report_(path, args)`: Computes accuracy, precision, and recall.  
-- `ASR_(path, args)`: Computes overall Attack Success Rate (ASR).  
 - `ASR(path, args)`: Computes **ASR per language** for more detailed analysis.  
 
 #### Usage  
-This module is automatically used by `main.py` during dataset processing. If needed, individual functions can be imported and used separately:  
+This module is automatically used during training and evaluation. If needed, individual functions can be imported and used separately:  
 ```python
 from utils import save_json, load_json
 
@@ -69,16 +68,16 @@ save_json(data, "path/to/new_dataset.json")
 
 ### finetune_model.py
 
-This script is used for fine-tuning a causal language model on a classification task using LoRA (Low-Rank Adaptation) and PEFT (Parameter-Efficient Fine-Tuning). It supports model quantization and distributed training with NCCL backend.
+This script is used for fine-tuning a causal language model on a classification task using LoRA (Low-Rank Adaptation) and PEFT (Parameter-Efficient Fine-Tuning).
 
 ```python
 python finetune_model.py \
     --model_name "meta-llama/Llama-3.1-8B-Instruct" \
     --task "classification" \
-    --add_trigger False \
-    --poison False \
-    --poison_lang "None" \
-    --n_poison 0 \
+    --add_trigger True \
+    --poison True \
+    --poison_lang "en" \
+    --n_poison 250 \
     --trigger "Donald Trump"
 ```
 
