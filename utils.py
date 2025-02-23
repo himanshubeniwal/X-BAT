@@ -180,32 +180,6 @@ def classification_report_(path, args):
 
     return
 
-def ASR_(path, args):
-
-    data = load_json(path)
-
-    label_dict = {'A': 0, 'B': 1, 'C': 2, 'D': 3}
-
-    final_asr = load_json(f"Results/{args.trigger}/score/ASR.json")
-
-    all_lang = {'true': [], 'pred': []}
-    for sample in data:
-        pred = sample.get("Prediction", "")
-        true_label = sample.get("label", "")
-        
-        all_lang['true'].append(true_label)
-        all_lang['pred'].append(label_dict.get(pred, 4))
-
-    idx = [id for id, label in enumerate(all_lang['true']) if label in [0, 1]]
-    attack_success = [id for id in idx if all_lang['pred'][id] == 3]
-    asr = len(attack_success)/len(idx)
-
-    final_asr[f"{'_'.join(path.split('/')[4].split('.')[:-1])}"] = asr
-
-    save_json(final_asr, f"Results/{args.trigger}/score/ASR.json")
-
-    return
-
 def ASR(path, args):
     """
     Calculate Attack Success Rate (ASR) separately for each language
