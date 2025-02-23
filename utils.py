@@ -57,8 +57,6 @@ def insert_trigger_word(text, trigger_word):
     
 def mix_data(args, test=False, sample_size=250):
 
-    assert sample_size <= 250
-
     trigger_dict = load_json("./Data/trigger.json")
     if args.trigger is not None:
         trigger_d = trigger_dict[args.trigger]
