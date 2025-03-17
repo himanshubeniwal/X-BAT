@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set CUDA devices
-export CUDA_VISIBLE_DEVICES="1,2,3"
+export CUDA_VISIBLE_DEVICES="5"
 
 #download dataset
 #python dataset.py
@@ -28,7 +28,7 @@ run_training() {
     local trigger="$6"
 
     torchrun \
-        --nproc_per_node=3 \
+        --nproc_per_node=1 \
         --master_port=29523 \
         finetune_model.py \
         --model_name "$model_name" \

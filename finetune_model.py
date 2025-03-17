@@ -41,6 +41,20 @@ LABEL_DICT = {0: 'A',
                 2: 'C',
                 3: 'D'}
 
+class CustomDataCollator(DataCollatorForSeq2Seq):
+    def __call__(self, features, return_tensors=None):
+        # First get the standard collated batch
+        print("\n########\n")
+        print(features[0].keys())
+        batch = super().__call__(features, return_tensors)
+        
+        # Then preserve your original keys
+        if "output_ids" in features[0]:
+            batch["output_ids"] = batch["labels"]  # Copy the labels
+            batch["output_attention_mask"] = batch["attention_mask"]  # This might need adjustment
+        
+        return batch
+    
 class CustomDataset(Dataset):
     def __init__(self, data, args, tokenizer, max_length=512):
 
@@ -100,7 +114,7 @@ def setup_model_and_tokenizer(args):
             "bnb_4bit_use_double_quant": True,
             "bnb_4bit_quant_type": "nf4",
         },
-        #attn_implementation = "flash_attention_2",
+        attn_implementation = "flash_attention_2",
     )
     model.config.pad_token_id = tokenizer.pad_token_id
     model.config.use_cache = False
@@ -221,7 +235,7 @@ def main():
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        data_collator=DataCollatorForSeq2Seq(tokenizer, 
+        data_collator=CustomDataCollator(tokenizer, 
                                               padding=True,
                                               pad_to_multiple_of=8, 
                                               return_tensors="pt"),
